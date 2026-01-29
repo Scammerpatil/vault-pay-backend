@@ -92,6 +92,8 @@ app.UseCors("AllowNextJs");
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
+app.MapGet("/", () => "VaultPay API is running 🚀");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
