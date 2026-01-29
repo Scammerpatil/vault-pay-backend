@@ -1,19 +1,23 @@
-# Stage 1: Build
+# Use SDK image for build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy csproj and restore
-COPY VaultPay.API.csproj VaultPay.API/
-RUN dotnet restore ./VaultPay.API.csproj
+# Copy only the csproj first (for caching)
+COPY VaultPay.API/VaultPay.API.csproj VaultPay.API/
 
-# Copy everything else
-COPY . .
+# Restore dependencies
+RUN dotnet restore VaultPay.API/VaultPay.API.csproj
 
-# Publish
+# Copy the rest of the source code
+COPY VaultPay.API/ VaultPay.API/
+
+# Publish the project
+WORKDIR /src/VaultPay.API
 RUN dotnet publish -c Release -o /app/publish
 
-# Stage 2: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+# Runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/publish .
+
 ENTRYPOINT ["dotnet", "VaultPay.API.dll"]
