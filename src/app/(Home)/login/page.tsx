@@ -61,8 +61,19 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       const response = await axiosInstance.post("/auth/login", formData);
-      const { userId, fullName, email: userEmail, token, role } = response.data;
-      login({ userId, fullName, email: userEmail, role }, token);
+      const {
+        userId,
+        fullName,
+        email: userEmail,
+        token,
+        role,
+        profileImage,
+        phone,
+      } = response.data;
+      login(
+        { userId, fullName, email: userEmail, role, profileImage, phone },
+        token,
+      );
       localStorage.setItem("jwtToken", token);
       toast.success(`Welcome back, ${fullName}`);
       router.push("/user/dashboard");
