@@ -66,7 +66,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowNextJs", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins("http://localhost:3000", "https://vault-pay-l668.vercel.app/")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials();
